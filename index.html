@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="stats.js"></script>
+    <title>SENSOR MONITORING DASHBOARD</title>
+  </head>
+
+  <body>
+    <div class="myContainer">
+      <!-- Sidebar Section -->
+      <aside style="position: sticky; top: 0; left: 0">
+        <div class="toggle" style="position: sticky">
+          <div class="logo">
+            <!-- <img src="images/logo.png" /> -->
+            <h3 style="font-size: 14px">
+              SENSOR<span class="danger">MONITORING</span>
+            </h3>
+          </div>
+          <div class="close" id="close-btn">
+            <span class="material-icons-sharp"> close </span>
+          </div>
+        </div>
+
+        <div class="mySidebar" style="position: sticky">
+          <a href="#">
+            <span class="material-icons-sharp"> dashboard </span>
+            <h2 style="font-size: 16px">Dashboard</h2>
+          </a>
+          <a href="#">
+            <span class="material-icons-sharp"> person_outline </span>
+            <h3 style="font-size: 14px">Users</h3>
+          </a>
+          <a href="#">
+            <span class="material-icons-sharp"> receipt_long </span>
+            <h3 class="fnt">History</h3>
+          </a>
+          <a href="#" id="strain" onclick="toggleChartContainer()">
+            <span class="material-icons-sharp"> insights </span>
+            <h3 style="font-size: 14px">Strain Sensor</h3>
+          </a>
+          <a href="#" id="temp" onclick="toggleChartContainer1()">
+            <span class="material-icons-sharp"> device_thermostat </span>
+            <h3 style="font-size: 14px">Temperature Sensor</h3>
+          </a>
+          <a href="#" id="vib" onclick="toggleChartContainer2()">
+            <span class="material-icons-sharp"> vibration </span>
+            <h3 style="font-size: 14px">Vibration Sensor</h3>
+          </a>
+          <a href="#" id="pre" onclick="toggleChartContainer3()">
+            <span class="material-icons-sharp"> compress </span>
+            <h3 style="font-size: 14px">Pressure Sensor</h3>
+          </a>
+          <a href="#">
+            <span class="material-icons-sharp"> settings </span>
+            <h3 style="font-size: 14px">Settings</h3>
+          </a>
+          <a href="#">
+            <span class="material-icons-sharp"> add </span>
+            <h3 style="font-size: 14px">New Login</h3>
+          </a>
+          <a href="#">
+            <span class="material-icons-sharp"> logout </span>
+            <h3 style="font-size: 14px">Logout</h3>
+          </a>
+        </div>
+      </aside>
+      <!-- End of Sidebar Section -->
+
+      <!-- Main Content -->
+      <main>
+        <h1>Sensors Analytics</h1>
+        <div
+          id="chartContainer1"
+          style="height: 370px; width: 100%; position: relative"
+        ></div>
+        <!-- <hr /> -->
+        <div
+          id="dummyChart"
+          style="height: 320px; width: 70%; position: relative"
+        >
+          <img
+            src="./images/temperature.png"
+            alt=""
+            style="position: relative; margin-bottom: 20px"
+          />
+        </div>
+        <!-- <hr /> -->
+        <div
+          id="vibration"
+          style="height: 320px; width: 70%; position: relative"
+        >
+          <img
+            src="./images/vibration.png"
+            alt=""
+            style="position: relative; margin-bottom: 20px"
+          />
+        </div>
+        <!-- <hr /> -->
+        <div
+          id="pressure"
+          style="height: 320px; width: 70%; position: relative"
+        >
+          <img
+            src="./images/pressure.png"
+            alt=""
+            style="position: relative; margin-bottom: 20px"
+          />
+        </div>
+        <!-- <hr /> -->
+
+        <!-- Recent Orders Table -->
+        <div class="recent-orders">
+          <h2>Recent Statistics</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Resistance <span>&ohm;</span></th>
+                <th>Average <span>&ohm;</span>/s</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <a href="#">Show All</a>
+        </div>
+        <!-- End of Recent Orders -->
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                  Add Readings in Firebase.
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label"
+                      >Reading Value:</label
+                    >
+                    <input
+                      placeholder="Enter label here"
+                      type="text"
+                      class="form-control"
+                      id="reading"
+                    />
+                    <br />
+                    <input
+                      placeholder="Enter reading value"
+                      type="number"
+                      class="form-control"
+                      id="val"
+                    />
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" class="btn btn-primary" onclick="save()">
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!-- End of Main Content -->
+
+      <!-- Right Section -->
+      <div class="right-section">
+        <div class="nav">
+          <button id="menu-btn">
+            <span class="material-icons-sharp"> menu </span>
+          </button>
+          <div class="dark-mode">
+            <span class="material-icons-sharp active"> light_mode </span>
+            <span class="material-icons-sharp"> dark_mode </span>
+          </div>
+
+          <div class="profile">
+            <div class="info">
+              <p>Hey, <b>XYZ</b></p>
+              <small class="text-muted">Admin</small>
+            </div>
+            <div class="profile-photo">
+              <img src="images/profile-1.jpg" />
+            </div>
+          </div>
+        </div>
+        <!-- End of Nav -->
+
+        <!-- <div class="user-profile">
+          <div class="logo">
+            <img src="images/logo.png" />
+            <h2>Muhammad Arshad</h2>
+            <p>Fullstack Web Developer</p>
+          </div>
+        </div> -->
+
+        <div class="reminders">
+          <div class="header">
+            <h2>Reminders</h2>
+            <span class="material-icons-sharp"> notifications_none </span>
+          </div>
+
+          <div class="notification">
+            <div class="icon">
+              <span class="material-icons-sharp"> volume_up </span>
+            </div>
+            <div class="content">
+              <div class="info">
+                <h3>Workshop</h3>
+                <small class="text_muted"> 08:00 AM - 12:00 PM </small>
+              </div>
+              <span class="material-icons-sharp"> more_vert </span>
+            </div>
+          </div>
+
+          <div class="notification deactive">
+            <div class="icon">
+              <span class="material-icons-sharp"> edit </span>
+            </div>
+            <div class="content">
+              <div class="info">
+                <h3>Conference</h3>
+                <small class="text_muted"> 08:00 AM - 1:00 PM </small>
+              </div>
+              <span class="material-icons-sharp"> more_vert </span>
+            </div>
+          </div>
+          <div class="notification deactive">
+            <div class="icon">
+              <span class="material-icons-sharp"> edit </span>
+            </div>
+            <div class="content">
+              <div class="info">
+                <h3>Meeting</h3>
+                <small class="text_muted"> 06:00 PM - 7:00 PM </small>
+              </div>
+              <span class="material-icons-sharp"> more_vert </span>
+            </div>
+          </div>
+
+          <div class="notification add-reminder">
+            <div>
+              <span class="material-icons-sharp"> add </span>
+
+              <a href="#" class="active">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  data-bs-whatever="@mdo"
+                >
+                  <h3>Add Sensor Values</h3>
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
+    <script src="index.js"></script>
+    <script src="index1.js"></script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
+  </body>
+</html>
